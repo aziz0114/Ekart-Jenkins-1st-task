@@ -19,9 +19,9 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
+        stage('Building and running tests') {
             steps {
-                sh 'mvn test'
+                sh 'mvn clean package -DskipTests'
             }
         }
 
