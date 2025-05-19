@@ -2,52 +2,30 @@ pipeline {
     agent any
 
     tools {
-        jdk 'jdk 17'         // Ensure 'jdk 17' matches the name in Global Tool Config
-        maven 'maven 3'       // Ensure 'maven3' is correctly configured in Jenkins
+        jdk 'jdk 17'
+        maven 'maven 3'
     }
 
     stages {
-        stage('Checkout Code') {
+        stage('Git') {
             steps {
                 git branch: 'main', url: 'https://github.com/sawsansalah/Ekart.git'
             }
         }
-
         stage('Compile') {
             steps {
                 sh 'mvn compile'
             }
         }
-
-        stage('Building and running tests') {
+        stage('Test') {
             steps {
-                sh 'mvn clean package -DskipTests'
+                sh 'mvn test'
             }
         }
-
         stage('Package') {
             steps {
                 sh 'mvn package'
             }
         }
-
-        stage('Archive Artifacts') {
-            steps {
-                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
-            }
-        }
-    }
-
-    post {
-        always {
-            echo 'Pipeline execution complete.'
-        }
-        success {
-            echo 'Build succeeded!'
-        }
-        failure {
-            echo 'Build failed!'
-        }
     }
 }
-
